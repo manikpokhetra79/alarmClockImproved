@@ -12,14 +12,14 @@ let displayClock = () => {
     let hours = today.getHours();
     let minutes = today.getMinutes();
     let seconds = today.getSeconds();
-    let format = today > 12 ? "P.M" : "A.M" ;
+    let format = hours <12 ?"A.M" :'P.M';
     let clock = document.getElementById('clock');
     //Insert current time to the clock div as innerHTML
     clock.innerHTML = `
     ${hours % 12 < 10 ? '0'+ (hours % 12) : (hours % 12) }
-    :${minutes < 10 ? '0' + minutes : minutes}
-    :${seconds < 10 ? '0' + seconds : seconds}
-    :${format}
+    : ${minutes < 10 ? '0' + minutes : minutes}
+    : ${seconds < 10 ? '0' + seconds : seconds}
+    : ${format}
     `;
     //create a setTimeout to call displayClock function for Working Clock Display
     setTimeout(displayClock,1000);
@@ -80,13 +80,15 @@ let displayAlarmsList = () => {
     let newLi = document.createElement('li');
     newLi.className = "alarms-li";
     newLi.innerHTML = `
+    <span class="fa-li"><i class="fas fa-bell fa-2x"></i></span>
     ${months[alarmTime.getMonth()]}
-    ${alarmTime.getDate() } :
-    ${hours % 12 < 10 ? ("0" + (hours % 12)): (hours % 12)} :
-    ${minutes<10 ? "0"+ minutes : minutes } :
-    ${seconds<10 ? "0"+ seconds : seconds } :
+    ${alarmTime.getDate()} 
+    @ 
+    ${hours % 12 < 10 ? ("0" + (hours % 12)): (hours % 12)}:
+    ${minutes<10 ? "0"+ minutes : minutes }:
+    ${seconds<10 ? "0"+ seconds : seconds }:
     ${format} 
-    <button onClick={deleteAlarm(${index})} type="submit" class='deleteAlarm'>Delete</button>    
+    <button onClick={deleteAlarm(${index})} type="submit" class='deleteAlarm button'>Delete</button>    
     `;
     alarms_ul.appendChild(newLi);
 });
