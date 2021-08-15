@@ -1,10 +1,11 @@
 // Global variables and objects //
 
-// Create two arrays to store duration of remaining time for alarm and alarm Time Objects //
-let alarmsListArray = [];
-// let durationListArray = [];
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-var timer ;
+var timer =[];
+var i = 0;
+
+var alarms_ul = document.getElementById('alarms_ul');
+
 
 // Display clock function //
 let displayClock = () => {
@@ -36,28 +37,17 @@ let setAlarm = () => {
         if(duration < 0){
             alert('Time has already passed');
         }else{
-            // Push alarm_time obj into alarmsListArray //
-            alarmsListArray.push(alarm_time);
-            alarmsListArray.sort();
-            displayAlarmsList();
-
+            displayAlarms(alarm_time);
             console.log("remaining time in seconds",duration/1000);
-             setTimeout(()=>{
-            if(alarmsListArray.length > 0){
-                alarmsListArray.shift();
-            }
-            displayAlarmsList();
+            timer[i++] = setTimeout(() => {
             alert('Times up');
             console.log("Alarm Deleted");
+             // remove the alarm from dom
+             document.getElementById(alarm_time).remove();
+             i--;
+
             },duration);
-            // push duration into durationListArray //
-            // durationListArray.push(duration);
-            // durationListArray.sort();
-            // console.log( durationListArray);
-            //call Initiate Alarm function with shortest duration
-            // if(durationListArray.length > 0){
-            //     initiateAlarm(durationListArray[0]);
-            // }
+
         }
     }else{
         alert('Select Alarm Time !!!')
@@ -65,11 +55,9 @@ let setAlarm = () => {
 
 }
 // Display Alarm List //
-let displayAlarmsList = () => {
-    let alarms_ul = document.getElementById('alarms_ul');
+let displayAlarms = (time) => {
+    
     //clear alarms_ul innerHTml to avoid already appened duplicated lists everytime a new alarm is added
-    alarms_ul.innerHTML='';
-    alarmsListArray.forEach((time,index) => {
     // create necessary variables for every alarm_time object in the array ...
     let alarmTime = time;
     let hours = alarmTime.getHours();
@@ -79,6 +67,7 @@ let displayAlarmsList = () => {
     //create newLi tag to append to the alarms List
     let newLi = document.createElement('li');
     newLi.className = "alarms-li";
+    newLi.id=  time;
     newLi.innerHTML = `
     <span class="fa-li"><i class="fas fa-bell fa-2x"></i></span>
     ${months[alarmTime.getMonth()]}
@@ -88,41 +77,28 @@ let displayAlarmsList = () => {
     ${minutes<10 ? "0"+ minutes : minutes }:
     ${seconds<10 ? "0"+ seconds : seconds }:
     ${format} 
-    <button onClick={deleteAlarm(${index})} type="submit" class='deleteAlarm button'>Delete</button>    
+    <button  type="submit" onClick={deleteAlarm(${i})} class='deleteAlarm button'>Delete</button>    
     `;
     alarms_ul.appendChild(newLi);
-});
 }
-//Delete Alarm function
-let deleteAlarm = (index)=>{
-    alarmsListArray.splice(index,1);
-    //call displayAlarmsList function again
-    displayAlarmsList();
-}
-//Initiate alarm function
-// let initiateAlarm = (duration)=> {
-//     setTimeout( () => {
-//         alert('Time is up !!!');
-       
-//         //remove related alarm obj from alarmsListArray
-//         if(alarmsListArray.length > 0){
-//             alarmsListArray.shift();
-//         }
-//         // remove the current duration from durationList array
-//         durationListArray.shift();
-//         console.log( durationListArray);
-//         if(durationListArray.length > 0){
-//             initiateAlarm(durationListArray[0]);
-//         }
-//         // call displayAlarmList function
-//           displayAlarmsList();
-      
-//     },duration);
-// }
 
+//Delete Alarm function
+let deleteAlarm = (index)=> {
+   
+    clearInterval(timer[index]);    
+ 
+}
+
+function removeAlarm(el){
+    console.log(el);
+    if(el.classList.contains('deleteAlarm')){
+      el.parentElement.remove();
+    }
+
+}
         //  Handle Events //  
 
-//Hanle DisplayClock
+//Hanlde DisplayClock
 document.addEventListener('DOMContentLoaded ',displayClock());
 
 //handle Add Alarm
@@ -130,5 +106,9 @@ document.querySelector('#submit_alarm_time').addEventListener('click',(e)=>{
     e.preventDefault();
     //Call setAlarm function
     setAlarm();
-})
+});
+//handle delete alarm event for removing the li from thelist
+document.getElementById('alarms_ul').addEventListener('click',(e)=>{
 
+    removeAlarm(e.target); 
+})
