@@ -13,11 +13,12 @@ let displayClock = () => {
     let hours = today.getHours();
     let minutes = today.getMinutes();
     let seconds = today.getSeconds();
-    let format = hours <12 ?"A.M" :'P.M';
+    let format = hours < 12 ?"A.M" :'P.M';
     let clock = document.getElementById('clock');
+    let currentHour = hours < 10 ? '0' + hours : hours ;
     //Insert current time to the clock div as innerHTML
     clock.innerHTML = `
-    ${hours % 12 < 10 ? '0'+ (hours % 12) : (hours % 12) }
+    ${hours > 12 ? hours - 12 : currentHour }
     : ${minutes < 10 ? '0' + minutes : minutes}
     : ${seconds < 10 ? '0' + seconds : seconds}
     : ${format}
@@ -25,6 +26,7 @@ let displayClock = () => {
     //create a setTimeout to call displayClock function for Working Clock Display
     setTimeout(displayClock,1000);
 }
+
 let setAlarm = () => {
     let alarmsInput = document.getElementById('alarm_input');
     let alarm = alarmsInput.value;
