@@ -40,7 +40,7 @@ let setAlarm = () => {
             alert('Time has already passed');
         }else{
             displayAlarms(alarm_time);
-            console.log("remaining time in seconds",duration/1000);
+            // console.log("remaining time in seconds",duration/1000);
             timer[i++] = setTimeout(() => {
             alert('Times up');
             console.log("Alarm Deleted");
@@ -56,6 +56,7 @@ let setAlarm = () => {
     }
 
 }
+
 // Display Alarm List //
 let displayAlarms = (time) => {
     
@@ -92,7 +93,7 @@ let deleteAlarm = (index)=> {
 }
 
 function removeAlarm(el){
-    console.log(el);
+    // console.log(el);
     if(el.classList.contains('deleteAlarm')){
       el.parentElement.remove();
     }
@@ -109,6 +110,7 @@ document.querySelector('#submit_alarm_time').addEventListener('click',(e)=>{
     //Call setAlarm function
     setAlarm();
 });
+
 //handle delete alarm event for removing the li from thelist
 document.getElementById('alarms_ul').addEventListener('click',(e)=>{
 
